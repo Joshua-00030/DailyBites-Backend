@@ -1,35 +1,19 @@
 const mongoose = require('mongoose')
-/*
-mongoose.set('useFindAndModify', false)
 
-const url = process.env.MONGODB_URI
-
-console.log('connecting to', url)
-
-mongoose.connect(url, { useNewUrlParser: true })
-    .then(result => {
-        console.log('connected to MongoDB')
-    })
-    .catch((error) => {
-        console.log('error connection to MongoDB:', error.message)
-    })
-*/
 const userItemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         minlength: 2
     },
-    nutrition: [
-        {
-            name: { type: String, unique: true, required: true },
-            value: { type: Number, required: true, }
-        }
-    ],
-    tags: [String],
+	tags: [String],
+    nutrition: [{
+	    name: {type: String},
+	    value: {type: Number},
+	    _id: false
+    }],
     user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+	    type: String
     }
 })
 

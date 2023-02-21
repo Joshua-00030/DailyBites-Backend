@@ -13,10 +13,17 @@ const getTokenFrom = request => {
 }
 
 useritemsRouter.get('/', async (request, response) => {
-  const useritems = await UserItem
-    .find({}).populate('user', { username: 1, name: 1 })
+  const body = request.body
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!decodedToken.id) {
+	  return response.status(401).json({ error: 'token invalid' })  
+  }  
+  const user = await User.findById(decodedToken.id)
+  
+  const userItems = await UserItem
+    .find({user:user.username})
 
-  response.json(useritems)
+  response.json(userItems)
 })
 
 useritemsRouter.post('/', async (request, response) => {
@@ -28,21 +35,20 @@ useritemsRouter.post('/', async (request, response) => {
   }
 try{
   const user = await User.findById(decodedToken.id)
-
+  
   const useritem = new UserItem({
     name: body.name,
-    tags: body.tags,
     nutrition: body.nutrition,
-    user: user._id
+    tags: body.tags,
+    user: user.username
   })
-
   const savedUserItem = await useritem.save()
-  user.useritems = user.useritems.concat(savedUserItem._id)
+  user.items = user.items.concat(savedUserItem._id)
   await user.save()
 
   response.json(savedUserItem)
 }catch(error){
-  next(error)
+  console.log('next(error)')
 }
 })
 

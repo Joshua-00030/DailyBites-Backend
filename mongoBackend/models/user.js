@@ -15,6 +15,13 @@ const userSchema = mongoose.Schema({
       ref: 'UserItem'
     }
   ],
+  history: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserItem',
+      timestamps: true
+    }
+  ]
 })
 
 userSchema.plugin(uniqueValidator)
