@@ -8,9 +8,8 @@ const userItemSchema = new mongoose.Schema({
     },
 	tags: [String],
     nutrition: [{
-	    name: {type: String},
-	    value: {type: Number},
-	    _id: false
+	    name: {type: String, unique: false},
+	    value: {type: Number, unique: false}
     }],
     user:{
 	    type: String

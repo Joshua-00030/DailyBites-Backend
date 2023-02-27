@@ -23,7 +23,7 @@ mongoose.connect(config.MONGODB_URI)
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message)
   })
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())

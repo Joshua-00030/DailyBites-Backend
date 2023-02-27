@@ -35,6 +35,9 @@ useritemsRouter.post('/', async (request, response) => {
   }
 try{
   const user = await User.findById(decodedToken.id)
+  if(!user){
+	  return response.status(401).json({error: "user not found"})
+  }
   
   const useritem = new UserItem({
     name: body.name,
@@ -43,12 +46,12 @@ try{
     user: user.username
   })
   const savedUserItem = await useritem.save()
-  user.items = user.items.concat(savedUserItem._id)
+  user.items = user.items.concat(savedUserItem.id)
   await user.save()
 
   response.json(savedUserItem)
 }catch(error){
-  console.log('next(error)')
+  console.log(error)
 }
 })
 
