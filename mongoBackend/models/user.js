@@ -17,11 +17,16 @@ const userSchema = mongoose.Schema({
   ],
   history: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'UserItem',
-      timestamps: true
+      itemId:{
+      	type: mongoose.Schema.Types.ObjectId,
+      	ref: 'UserItem'},
+      date: {type: Date, required: true}
     }
-  ]
+  ],
+  trackedNutrients: [{
+            name: {type: String, unique: false, required: true},
+            unit: {type: String, unique: false, required: true}
+    }]
 })
 
 userSchema.plugin(uniqueValidator)

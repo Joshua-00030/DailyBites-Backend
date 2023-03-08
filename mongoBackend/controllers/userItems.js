@@ -47,11 +47,27 @@ try{
   })
   const savedUserItem = await useritem.save()
   user.items = user.items.concat(savedUserItem.id)
-  await user.save()
 
+  const bulkOps = body.nutrition.map(i => {
+	  //console.log(i)
+	  return{
+		  updateOne:{
+			  filter: {_id: decodedToken.id, 'trackedNutrients.name': {'$ne': i.name} },
+	  update: { $addToSet: {'trackedNutrients': {'name': i.name, 'unit': i.measurement}}},
+	  function(err) {
+              if(err) {
+		      console.log('fail')
+              } else {
+		      console.log('pass')
+	      }}}}})
+User.bulkWrite(bulkOps)
+await user.save()
+  //user.trackedNutrients = user.trackedNutrients.concat({'name': body.nutrition[0].name, 'unit': body.nutrition[0].measurement})
+//	console.log(rp)
   response.json(savedUserItem)
 }catch(error){
   console.log(error)
+  response.json(error)
 }
 })
 

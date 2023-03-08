@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 require('express-async-errors')
 
 const userItemsRouter = require('./controllers/userItems')
