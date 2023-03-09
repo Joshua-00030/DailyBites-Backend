@@ -14,7 +14,7 @@ const getTokenFrom = request => {
 
 useritemsRouter.get('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(getTokenFrom(request), "test")
   if (!decodedToken.id) {
 	  return response.status(401).json({ error: 'token invalid' })  
   }  
@@ -29,7 +29,7 @@ useritemsRouter.get('/', async (request, response) => {
 useritemsRouter.post('/', async (request, response) => {
   const body = request.body
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(getTokenFrom(request), "test")
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -84,7 +84,7 @@ useritemsRouter.delete('/:id', async (request, response) => {
   const token = getTokenFrom(request)
   const decodedToken = token === null
   ? false
-  : jwt.verify(token, process.env.SECRET)
+  : jwt.verify(token, "test")
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
