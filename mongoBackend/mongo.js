@@ -8,7 +8,7 @@ if (process.argv.length<3) {
 const password = process.argv[2]
 
 const url =
-  `mongodb+srv://admin-main:xEhTEO6Kv94514Ro@cluster0.wvgmz.mongodb.net/dailyBites`
+  `mongodb+srv://fullstack:${password}@cluster0.o1opl.mongodb.net/testing?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery',false)
 mongoose.set('strictPopulate', false)

@@ -14,7 +14,7 @@ const getTokenFrom = request => {
 
 usersRouter.get("/:username", async (request, response) => {
   // response.send(request.params.username)
-  const decodedToken = jwt.verify(getTokenFrom(request), "test")
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -61,7 +61,7 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.put('/addItemToHistory', async (request, response) => {
-  const decodedToken = jwt.verify(getTokenFrom(request), "test")
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -87,7 +87,7 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/getHistory', async (request, response) => {
 
-  const decodedToken = jwt.verify(getTokenFrom(request), "test")
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
