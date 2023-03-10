@@ -24,7 +24,7 @@ usersRouter.get("/:username", async (request, response) => {
 })
 
 // maybe find user first then update?
-usersRouter.put("/:username", async (request, response) => {
+usersRouter.put("/updateCal/:username", async (request, response) => {
   const newCalorie = request.body.updateCalorie
   const username = request.body.myusername
   await User.updateOne({username: username}
