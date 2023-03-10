@@ -102,57 +102,42 @@ const ed = new Date(request.body.edate)
 
 const rp = await User.aggregate([
     { $match: {_id: id }},
-	
-    { $lookup: {
-	    from: "useritems",
-	    let: {hist: "$history", items: "$items" },
-	    pipeline: [
-		    { $match: {$expr: {$and:
-			    [
-				    { $in: ["$_id", "$$hist.itemId"] }
-			    ]
-		    }}}
-	    ],
-	    as: "timeHistory"}},
 
-	{$project: {
-		hist: {
-	  $filter: {
-            input: "$history",
-            as: "his",
-            cond: { $and: [
-                    { $gte: ["$$his.date", sd]},
-                    { $lt: ["$$his.date", ed ]}
-            ]}
-    }}
-	}}
-	/*
-	 {
-      $replaceRoot: { newRoot: { $mergeObjects: [ "$timeHistory", "$$ROOT.history" ] } }
-	  }
-	  */
+    { $project: { 
+	    hist:{$filter: {
+		    input: "$history",
+		    as: "h",
+		    cond: { $and:[
+		    {$gte: ["$$h.date", sd]},
+		    { $lt: ["$$h.date", ed]}
+		    ]}
+	    }}
+    }},
+{$lookup:
+	{
+		from: "useritems",
+		localField: "hist.itemId",
+		foreignField: "_id",
+		as: "data"
+	}},
+	{$project: {data: 1, hist: 1}}
   ], function(err, rep) {
             if (err){
                     return err
             }
             else{
-                response.status(201).json(rep)}
+  let results = []
+for(var i = 0; i < rep[0].hist.length; i++){
+	for(var j = 0; j < rep[0].data.length; j++){
+		if( String(rep[0].hist[i].itemId) === String(rep[0].data[j]._id)){
+			var item = {...rep[0].hist[i], ...rep[0].data[j]}
+			results.push(item)
+			break
+			}
+		}
+	}
+                response.status(201).json(results)}
     })
-
-	/*
-  User.find(
-	  {_id: decodedToken.id,
-	  'history.date': {
-        $gte: request.body.sdate,
-        $lt: request.body.edate
-    }},'history', function(err, rp) {
-	    if (err){
-		    return err
-	    }
-	    else{
-                response.status(201).json(rp)}
-    })
-    */
 
 }
 catch(error){
