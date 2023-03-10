@@ -11,6 +11,7 @@ const url =
   `mongodb+srv://fullstack:${password}@cluster0.o1opl.mongodb.net/testing?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery',false)
+mongoose.set('strictPopulate', false)
 mongoose.connect(url)
 
 const noteSchema = new mongoose.Schema({

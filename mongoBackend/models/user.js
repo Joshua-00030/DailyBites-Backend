@@ -9,6 +9,11 @@ const userSchema = mongoose.Schema({
   },
   email: String,
   passwordHash: String,
+  calorieTotal: {
+    type: Number,
+    required: true,
+    default: 2000
+  },
   items: [
     {
       type: mongoose.Schema.Types.ObjectId,

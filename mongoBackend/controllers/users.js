@@ -12,6 +12,29 @@ const getTokenFrom = request => {
   return null
 }
 
+usersRouter.get("/:username", async (request, response) => {
+  // response.send(request.params.username)
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+    const user = await User.findById(decodedToken.id) 
+    console.log(user.calorieTotal)
+    response.json(user.calorieTotal)
+})
+
+// maybe find user first then update?
+usersRouter.put("/:username", async (request, response) => {
+  const newCalorie = request.body.updateCalorie
+  const username = request.body.myusername
+  await User.updateOne({username: username}
+    , { $set: {
+      calorieTotal: newCalorie
+    }}).then(
+      response.status(200)
+    )
+  })
+
 usersRouter.post('/', async (request, response) => {
   const { username, password, email } = request.body
   const existingUser = await User.findOne({ username })
