@@ -79,6 +79,23 @@ catch(error){
 }
 })
 
+usersRouter.post('/deleteItemToday', async (request, response) => {
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  try{
+    const newItem = {itemId:request.body.id, date:request.body.date}
+    const user = await User.findById(decodedToken.id)
+
+    User.updateOne({_id: user._id}, {"$pull": {"history" : {"date": newItem.date}}}, { safe: true, multi:true }, function(err, obj) {
+      //do something smart
+  });
+  }
+  catch(error){
+    console.log(error)
+  } })
+
 usersRouter.get('/', async (request, response) => {
   const users = await User
     .find({}).populate('userItem', { name: 1, nutrition: 1, tags: 1 })
